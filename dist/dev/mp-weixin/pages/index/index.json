@@ -1,0 +1,9 @@
+{
+  "navigationBarTitleText": "智客Online",
+  "enablePullDownRefresh": true,
+  "usingComponents": {
+    "stat-card": "../../components/StatCard/StatCard",
+    "todo-list": "../../components/TodoList/TodoList",
+    "quick-actions": "../../components/QuickActions/QuickActions"
+  }
+}

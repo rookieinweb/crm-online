@@ -1,0 +1,9 @@
+{
+  "navigationBarTitleText": "我的客户",
+  "enablePullDownRefresh": true,
+  "usingComponents": {
+    "search-bar": "../../components/SearchBar/SearchBar",
+    "customer-item": "../../components/CustomerItem/CustomerItem",
+    "empty-state": "../../components/EmptyState/EmptyState"
+  }
+}

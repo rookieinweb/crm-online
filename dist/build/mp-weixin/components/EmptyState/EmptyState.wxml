@@ -1,0 +1,1 @@
+<view class="{{['empty-state', 'data-v-616f1387', b]}}" style="{{virtualHostStyle}}" hidden="{{virtualHostHidden || false}}" id="{{c}}"><text class="mark data-v-616f1387">空</text><text class="text data-v-616f1387">{{a}}</text></view>

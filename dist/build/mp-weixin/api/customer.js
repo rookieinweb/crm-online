@@ -1,0 +1,1 @@
+"use strict";const t=require("./mock/data.js");exports.createCustomer=function(e){return t.mockCreateCustomer(e)},exports.fetchCustomer=function(e){return t.mockGetCustomer(e)},exports.fetchCustomers=function(e){return t.mockGetCustomers(e)};

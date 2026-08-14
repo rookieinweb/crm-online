@@ -1,0 +1,109 @@
+
+.follow-page.data-v-73ab4f36 {
+  min-height: 100vh;
+  padding: 24rpx 24rpx 148rpx;
+  background: #f4f6fa;
+}
+.panel.data-v-73ab4f36 {
+  background: #ffffff;
+  border: 1rpx solid #e8edf5;
+  border-radius: 16rpx;
+  padding: 24rpx;
+  margin-bottom: 18rpx;
+}
+.composer-head.data-v-73ab4f36,
+.section-header.data-v-73ab4f36,
+.record-head.data-v-73ab4f36,
+.record-foot.data-v-73ab4f36,
+.composer-actions.data-v-73ab4f36 {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.section-title.data-v-73ab4f36 {
+  font-size: 30rpx;
+  font-weight: 800;
+  color: #111827;
+}
+.hint.data-v-73ab4f36,
+.count.data-v-73ab4f36 {
+  font-size: 22rpx;
+  color: #64748b;
+}
+.textarea.data-v-73ab4f36 {
+  width: 100%;
+  height: 168rpx;
+  margin-top: 18rpx;
+  padding: 18rpx;
+  box-sizing: border-box;
+  border-radius: 14rpx;
+  background: #f8fafc;
+  font-size: 28rpx;
+  color: #111827;
+}
+.composer-actions.data-v-73ab4f36 {
+  flex-wrap: wrap;
+  gap: 12rpx;
+  margin-top: 16rpx;
+  justify-content: flex-start;
+}
+.type-chip.data-v-73ab4f36 {
+  padding: 10rpx 18rpx;
+  border-radius: 12rpx;
+  background: #f1f5f9;
+  color: #475569;
+  font-size: 24rpx;
+}
+.type-chip.active.data-v-73ab4f36 {
+  background: #dbeafe;
+  color: #2563eb;
+  font-weight: 700;
+}
+.save-btn.data-v-73ab4f36 {
+  margin-left: auto;
+  width: 132rpx;
+  height: 62rpx;
+  line-height: 62rpx;
+  border-radius: 14rpx;
+  background: #2563eb;
+  color: #ffffff;
+  font-size: 26rpx;
+  font-weight: 800;
+}
+.record.data-v-73ab4f36 {
+  padding: 22rpx 0;
+  border-bottom: 1rpx solid #eef2f7;
+}
+.record.data-v-73ab4f36:last-child {
+  border-bottom: none;
+}
+.customer.data-v-73ab4f36 {
+  flex: 1;
+  min-width: 0;
+  font-size: 28rpx;
+  font-weight: 800;
+  color: #111827;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.type.data-v-73ab4f36 {
+  padding: 6rpx 12rpx;
+  border-radius: 8rpx;
+  background: #e0f2fe;
+  color: #0369a1;
+  font-size: 22rpx;
+  margin-left: 12rpx;
+}
+.content.data-v-73ab4f36 {
+  display: block;
+  margin-top: 12rpx;
+  font-size: 26rpx;
+  color: #334155;
+  line-height: 1.55;
+}
+.record-foot.data-v-73ab4f36 {
+  margin-top: 12rpx;
+  font-size: 22rpx;
+  color: #64748b;
+}

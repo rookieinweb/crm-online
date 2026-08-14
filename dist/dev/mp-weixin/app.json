@@ -1,0 +1,47 @@
+{
+  "pages": [
+    "pages/index/index",
+    "pages/customer/list",
+    "pages/customer/detail",
+    "pages/customer/form",
+    "pages/follow/list",
+    "pages/visit/today",
+    "pages/mine/index"
+  ],
+  "window": {
+    "navigationBarTextStyle": "black",
+    "navigationBarTitleText": "智客Online",
+    "navigationBarBackgroundColor": "#ffffff",
+    "backgroundColor": "#f4f6fa"
+  },
+  "tabBar": {
+    "custom": true,
+    "color": "#6b7280",
+    "selectedColor": "#2563eb",
+    "backgroundColor": "#ffffff",
+    "borderStyle": "black",
+    "list": [
+      {
+        "pagePath": "pages/index/index",
+        "text": "首页"
+      },
+      {
+        "pagePath": "pages/customer/list",
+        "text": "客户"
+      },
+      {
+        "pagePath": "pages/follow/list",
+        "text": "跟进"
+      },
+      {
+        "pagePath": "pages/visit/today",
+        "text": "拜访"
+      },
+      {
+        "pagePath": "pages/mine/index",
+        "text": "我的"
+      }
+    ]
+  },
+  "usingComponents": {}
+}

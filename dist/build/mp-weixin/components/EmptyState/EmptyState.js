@@ -1,0 +1,1 @@
+"use strict";const t=require("../../common/vendor.js"),e={__name:"EmptyState",props:{text:{type:String,default:"暂无数据"}},setup:e=>(s,a)=>({a:t.t(e.text),b:t.pvhc(s.$scope.data.virtualHostClass),c:t.gei(s,"")})},s=t._export_sfc(e,[["__scopeId","data-v-616f1387"]]);wx.createComponent(s);

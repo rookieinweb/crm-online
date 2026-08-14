@@ -1,0 +1,6 @@
+{
+  "navigationBarTitleText": "今日拜访",
+  "usingComponents": {
+    "empty-state": "../../components/EmptyState/EmptyState"
+  }
+}

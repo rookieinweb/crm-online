@@ -1,0 +1,7 @@
+{
+  "component": true,
+  "usingComponents": {
+    "todo-item": "../TodoItem/TodoItem",
+    "empty-state": "../EmptyState/EmptyState"
+  }
+}

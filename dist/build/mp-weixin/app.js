@@ -1,0 +1,1 @@
+"use strict";Object.defineProperty(exports,Symbol.toStringTag,{value:"Module"});const e=require("./common/vendor.js");Math;const o={onLaunch(){console.log("智客Online销售端启动")}};function t(){const t=e.createSSRApp(o),n=e.createPinia();return t.use(n),{app:t}}t().app.mount("#app"),exports.createApp=t;

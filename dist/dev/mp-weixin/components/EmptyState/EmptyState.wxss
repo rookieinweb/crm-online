@@ -1,0 +1,24 @@
+
+.empty-state.data-v-00c0c74e {
+  padding: 56rpx 24rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: #94a3b8;
+}
+.mark.data-v-00c0c74e {
+  width: 72rpx;
+  height: 72rpx;
+  border-radius: 16rpx;
+  background: #eef2f7;
+  color: #64748b;
+  font-size: 24rpx;
+  font-weight: 700;
+  line-height: 72rpx;
+  text-align: center;
+  margin-bottom: 16rpx;
+}
+.text.data-v-00c0c74e {
+  font-size: 26rpx;
+}

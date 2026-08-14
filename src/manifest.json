@@ -1,0 +1,20 @@
+{
+  "name": "智客Online",
+  "appid": "",
+  "description": "企业销售人员移动端客户管理与拜访管理工具",
+  "versionName": "1.0.0",
+  "versionCode": "100",
+  "transformPx": false,
+  "mp-weixin": {
+    "appid": "wxb344cc069e66259c",
+    "setting": {
+      "urlCheck": false
+    },
+    "usingComponents": true,
+    "mergeVirtualHostAttributes": true
+  },
+  "uniStatistics": {
+    "enable": false
+  },
+  "vueVersion": "3"
+}

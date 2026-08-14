@@ -1,0 +1,6 @@
+{
+  "navigationBarTitleText": "客户详情",
+  "usingComponents": {
+    "empty-state": "../../components/EmptyState/EmptyState"
+  }
+}

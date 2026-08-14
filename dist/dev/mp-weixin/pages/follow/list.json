@@ -1,0 +1,6 @@
+{
+  "navigationBarTitleText": "跟进记录",
+  "usingComponents": {
+    "empty-state": "../../components/EmptyState/EmptyState"
+  }
+}

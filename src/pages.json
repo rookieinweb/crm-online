@@ -1,0 +1,83 @@
+{
+  "pages": [
+    {
+      "path": "pages/index/index",
+      "style": {
+        "navigationBarTitleText": "智客Online",
+        "enablePullDownRefresh": true
+      }
+    },
+    {
+      "path": "pages/customer/list",
+      "style": {
+        "navigationBarTitleText": "我的客户",
+        "enablePullDownRefresh": true
+      }
+    },
+    {
+      "path": "pages/customer/detail",
+      "style": {
+        "navigationBarTitleText": "客户详情"
+      }
+    },
+    {
+      "path": "pages/customer/form",
+      "style": {
+        "navigationBarTitleText": "新增客户"
+      }
+    },
+    {
+      "path": "pages/follow/list",
+      "style": {
+        "navigationBarTitleText": "跟进记录"
+      }
+    },
+    {
+      "path": "pages/visit/today",
+      "style": {
+        "navigationBarTitleText": "今日拜访"
+      }
+    },
+    {
+      "path": "pages/mine/index",
+      "style": {
+        "navigationBarTitleText": "我的"
+      }
+    }
+  ],
+  "globalStyle": {
+    "navigationBarTextStyle": "black",
+    "navigationBarTitleText": "智客Online",
+    "navigationBarBackgroundColor": "#ffffff",
+    "backgroundColor": "#f4f6fa"
+  },
+  "tabBar": {
+    "custom": true,
+    "color": "#6b7280",
+    "selectedColor": "#2563eb",
+    "backgroundColor": "#ffffff",
+    "borderStyle": "black",
+    "list": [
+      {
+        "pagePath": "pages/index/index",
+        "text": "首页"
+      },
+      {
+        "pagePath": "pages/customer/list",
+        "text": "客户"
+      },
+      {
+        "pagePath": "pages/follow/list",
+        "text": "跟进"
+      },
+      {
+        "pagePath": "pages/visit/today",
+        "text": "拜访"
+      },
+      {
+        "pagePath": "pages/mine/index",
+        "text": "我的"
+      }
+    ]
+  }
+}

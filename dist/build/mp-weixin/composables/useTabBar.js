@@ -1,0 +1,1 @@
+"use strict";const e=require("../common/vendor.js");exports.useTabBar=function(t){e.onShow(()=>{const e=getCurrentPages(),n=e[e.length-1];if(n&&"function"==typeof n.getTabBar){const e=n.getTabBar();e&&"function"==typeof e.setSelected&&e.setSelected(t)}})};
