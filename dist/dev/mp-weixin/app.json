@@ -15,7 +15,6 @@
     "backgroundColor": "#f4f6fa"
   },
   "tabBar": {
-    "custom": true,
     "color": "#6b7280",
     "selectedColor": "#2563eb",
     "backgroundColor": "#ffffff",
@@ -23,23 +22,33 @@
     "list": [
       {
         "pagePath": "pages/index/index",
-        "text": "首页"
+        "text": "首页",
+        "iconPath": "static/tabbar/home.png",
+        "selectedIconPath": "static/tabbar/home-active.png"
       },
       {
         "pagePath": "pages/customer/list",
-        "text": "客户"
+        "text": "客户",
+        "iconPath": "static/tabbar/customer.png",
+        "selectedIconPath": "static/tabbar/customer-active.png"
       },
       {
         "pagePath": "pages/follow/list",
-        "text": "跟进"
+        "text": "跟进",
+        "iconPath": "static/tabbar/follow.png",
+        "selectedIconPath": "static/tabbar/follow-active.png"
       },
       {
         "pagePath": "pages/visit/today",
-        "text": "拜访"
+        "text": "拜访",
+        "iconPath": "static/tabbar/visit.png",
+        "selectedIconPath": "static/tabbar/visit-active.png"
       },
       {
         "pagePath": "pages/mine/index",
-        "text": "我的"
+        "text": "我的",
+        "iconPath": "static/tabbar/mine.png",
+        "selectedIconPath": "static/tabbar/mine-active.png"
       }
     ]
   },
