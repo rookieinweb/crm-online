@@ -5,6 +5,7 @@ const api_dashboard = require("../../api/dashboard.js");
 const constants_roles = require("../../constants/roles.js");
 const utils_format = require("../../utils/format.js");
 const composables_useTabBar = require("../../composables/useTabBar.js");
+const api_auth = require("../../api/auth.js");
 if (!Math) {
   (StatCard + TodoList + QuickActions)();
 }
@@ -16,15 +17,15 @@ const _sfc_main = {
   setup(__props) {
     composables_useTabBar.useTabBar(0);
     const userStore = store_user.useUserStore();
-    const profile = common_vendor.computed(() => userStore.profile);
+    common_vendor.computed(() => userStore.profile);
     const userName = common_vendor.computed(() => userStore.userName);
     const roleLabel = common_vendor.computed(() => constants_roles.ROLE_LABELS[userStore.role]);
     const todayStr = utils_format.formatTodayHeader();
     const stats = common_vendor.ref({
-      customerCount: 0,
-      todayFollowCount: 0,
-      todayVisitCount: 0,
-      dealAmount: 0
+      effectiveTotal: 0,
+      todayCreateNum: 0,
+      todayFollowNum: 0,
+      MonthlyTransactionVolume: 0
     });
     const todos = common_vendor.ref([]);
     const visitTasks = common_vendor.ref([]);
@@ -41,6 +42,7 @@ const _sfc_main = {
       }
     }
     function switchTo(url) {
+      console.log("url=========================>", url);
       common_vendor.index.switchTab({ url });
     }
     function goSearch() {
@@ -49,48 +51,56 @@ const _sfc_main = {
     function onTodoClick(item) {
       common_vendor.index.navigateTo({ url: `/pages/customer/detail?id=${item.customerId}` });
     }
+    common_vendor.onShow(() => {
+      console.log("process.env", "/");
+      fetchDashboardOverview();
+    });
+    async function fetchDashboardOverview() {
+      let res = await api_auth.getDashboardOverview({});
+      stats.value = res;
+      console.log("res", res);
+    }
     common_vendor.onMounted(loadData);
     common_vendor.onPullDownRefresh(loadData);
     return (_ctx, _cache) => {
       return {
-        a: common_vendor.t(profile.value.teamName),
-        b: common_vendor.t(roleLabel.value),
-        c: common_vendor.o(goSearch, "0b"),
-        d: common_vendor.t(userName.value),
-        e: common_vendor.t(common_vendor.unref(todayStr)),
-        f: common_vendor.o(($event) => switchTo("/pages/customer/list"), "8b"),
-        g: common_vendor.p({
+        a: common_vendor.t(roleLabel.value),
+        b: common_vendor.o(goSearch, "c0"),
+        c: common_vendor.t(userName.value),
+        d: common_vendor.t(common_vendor.unref(todayStr)),
+        e: common_vendor.o(($event) => switchTo("/pages/customer/list"), "04"),
+        f: common_vendor.p({
           label: "我的客户",
           icon: "客",
-          value: stats.value.customerCount,
+          value: stats.value.effectiveTotal,
           trend: "+8%"
         }),
-        h: common_vendor.o(($event) => switchTo("/pages/follow/list"), "67"),
-        i: common_vendor.p({
+        g: common_vendor.o(($event) => switchTo("/pages/follow/list"), "78"),
+        h: common_vendor.p({
           label: "今日待跟进",
           icon: "跟",
-          value: stats.value.todayFollowCount
+          value: stats.value.todayFollowNum
         }),
-        j: common_vendor.o(($event) => switchTo("/pages/visit/today"), "74"),
-        k: common_vendor.p({
+        i: common_vendor.o(($event) => switchTo("/pages/visit/today"), "e9"),
+        j: common_vendor.p({
           label: "今日拜访",
           icon: "访",
           value: stats.value.todayVisitCount
         }),
-        l: common_vendor.o(($event) => switchTo("/pages/mine/index"), "41"),
-        m: common_vendor.p({
+        k: common_vendor.o(($event) => switchTo("/pages/mine/index"), "a9"),
+        l: common_vendor.p({
           label: "成交金额",
           icon: "¥",
           value: common_vendor.unref(utils_format.formatCompactMoney)(stats.value.dealAmount),
           trend: "+12%"
         }),
-        n: common_vendor.o(($event) => switchTo("/pages/follow/list"), "82"),
-        o: common_vendor.o(onTodoClick, "db"),
-        p: common_vendor.p({
+        m: common_vendor.o(($event) => switchTo("/pages/follow/list"), "b9"),
+        n: common_vendor.o(onTodoClick, "fd"),
+        o: common_vendor.p({
           items: todos.value
         }),
-        q: common_vendor.o(($event) => switchTo("/pages/visit/today"), "03"),
-        r: common_vendor.f(visitTasks.value, (task, k0, i0) => {
+        p: common_vendor.o(($event) => switchTo("/pages/visit/today"), "d5"),
+        q: common_vendor.f(visitTasks.value, (task, k0, i0) => {
           return {
             a: common_vendor.t(common_vendor.unref(utils_format.formatDate)(task.planAt, "HH:mm")),
             b: common_vendor.t(task.customerName),
@@ -100,8 +110,8 @@ const _sfc_main = {
             f: task.id
           };
         }),
-        s: common_vendor.pvhc(_ctx.$scope.data.virtualHostClass),
-        t: common_vendor.gei(_ctx, "")
+        r: common_vendor.pvhc(_ctx.$scope.data.virtualHostClass),
+        s: common_vendor.gei(_ctx, "")
       };
     };
   }

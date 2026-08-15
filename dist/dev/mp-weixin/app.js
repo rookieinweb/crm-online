@@ -1,7 +1,9 @@
 "use strict";
 Object.defineProperty(exports, Symbol.toStringTag, { value: "Module" });
 const common_vendor = require("./common/vendor.js");
+const utils_auth = require("./utils/auth.js");
 if (!Math) {
+  "./pages/login/index.js";
   "./pages/index/index.js";
   "./pages/customer/list.js";
   "./pages/customer/detail.js";
@@ -13,6 +15,11 @@ if (!Math) {
 const _sfc_main = {
   onLaunch() {
     console.log("智客Online销售端启动");
+    if (utils_auth.getToken()) {
+      setTimeout(() => {
+        common_vendor.index.reLaunch({ url: "/pages/index/index" });
+      }, 0);
+    }
   }
 };
 function createApp() {

@@ -4,7 +4,7 @@
       <view class="header-top">
         <view>
           <text class="brand">智客Online</text>
-          <text class="role">{{ profile.teamName }} · {{ roleLabel }}</text>
+          <text class="role">{{ roleLabel }}</text>
         </view>
         <view class="search-btn" @click="goSearch">搜</view>
       </view>
@@ -16,35 +16,37 @@
       <StatCard
         label="我的客户"
         icon="客"
-        :value="stats.customerCount"
+        :value="stats.effectiveTotal"
         trend="+8%"
-        @click="switchTo('/pages/customer/list')"
+        @click.native="switchTo('/pages/customer/list')"
       />
       <StatCard
         label="今日待跟进"
         icon="跟"
-        :value="stats.todayFollowCount"
-        @click="switchTo('/pages/follow/list')"
+        :value="stats.todayFollowNum"
+        @click.native="switchTo('/pages/follow/list')"
       />
       <StatCard
         label="今日拜访"
         icon="访"
         :value="stats.todayVisitCount"
-        @click="switchTo('/pages/visit/today')"
+        @click.native="switchTo('/pages/visit/today')"
       />
       <StatCard
         label="成交金额"
         icon="¥"
         :value="formatCompactMoney(stats.dealAmount)"
         trend="+12%"
-        @click="switchTo('/pages/mine/index')"
+        @click.native="switchTo('/pages/mine/index')"
       />
     </view>
 
     <view class="section panel">
       <view class="section-header">
         <text class="section-title">今日待办</text>
-        <text class="section-link" @click="switchTo('/pages/follow/list')">全部</text>
+        <text class="section-link" @click="switchTo('/pages/follow/list')"
+          >全部</text
+        >
       </view>
       <TodoList :items="todos" @item-click="onTodoClick" />
     </view>
@@ -59,76 +61,96 @@
     <view class="section panel">
       <view class="section-header">
         <text class="section-title">今日拜访</text>
-        <text class="section-link" @click="switchTo('/pages/visit/today')">打卡</text>
+        <text class="section-link" @click="switchTo('/pages/visit/today')"
+          >打卡</text
+        >
       </view>
       <view v-for="task in visitTasks" :key="task.id" class="visit-row">
-        <view class="visit-time">{{ formatDate(task.planAt, 'HH:mm') }}</view>
+        <view class="visit-time">{{ formatDate(task.planAt, "HH:mm") }}</view>
         <view class="visit-info">
           <text class="visit-name">{{ task.customerName }}</text>
           <text class="visit-address">{{ task.address }}</text>
         </view>
-        <text class="visit-status" :class="task.status">{{ task.status === 'done' ? '已签' : '待签' }}</text>
+        <text class="visit-status" :class="task.status">{{
+          task.status === "done" ? "已签" : "待签"
+        }}</text>
       </view>
     </view>
   </view>
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue'
-import { onPullDownRefresh } from '@dcloudio/uni-app'
-import { useUserStore } from '@/store/user'
-import { fetchDashboard } from '@/api/dashboard'
-import { ROLE_LABELS } from '@/constants/roles'
-import { formatCompactMoney, formatDate, formatTodayHeader } from '@/utils/format'
-import { useTabBar } from '@/composables/useTabBar'
-import StatCard from '@/components/StatCard/StatCard.vue'
-import TodoList from '@/components/TodoList/TodoList.vue'
-import QuickActions from '@/components/QuickActions/QuickActions.vue'
+import { ref, computed, onMounted } from "vue";
+import { onPullDownRefresh, onShow } from "@dcloudio/uni-app";
+import { useUserStore } from "@/store/user";
+import { fetchDashboard } from "@/api/dashboard";
+import { ROLE_LABELS } from "@/constants/roles";
+import {
+  formatCompactMoney,
+  formatDate,
+  formatTodayHeader,
+} from "@/utils/format";
+import { useTabBar } from "@/composables/useTabBar";
+import StatCard from "@/components/StatCard/StatCard.vue";
+import TodoList from "@/components/TodoList/TodoList.vue";
+import QuickActions from "@/components/QuickActions/QuickActions.vue";
 
-useTabBar(0)
+import { getDashboardOverview } from "@/api/auth";
 
-const userStore = useUserStore()
-const profile = computed(() => userStore.profile)
-const userName = computed(() => userStore.userName)
-const roleLabel = computed(() => ROLE_LABELS[userStore.role])
-const todayStr = formatTodayHeader()
+useTabBar(0);
+
+const userStore = useUserStore();
+const profile = computed(() => userStore.profile);
+const userName = computed(() => userStore.userName);
+const roleLabel = computed(() => ROLE_LABELS[userStore.role]);
+const todayStr = formatTodayHeader();
 
 const stats = ref({
-  customerCount: 0,
-  todayFollowCount: 0,
-  todayVisitCount: 0,
-  dealAmount: 0
-})
-const todos = ref([])
-const visitTasks = ref([])
+  effectiveTotal: 0,
+  todayCreateNum: 0,
+  todayFollowNum: 0,
+  MonthlyTransactionVolume: 0,
+});
+const todos = ref([]);
+const visitTasks = ref([]);
 
 async function loadData() {
   try {
-    const data = await fetchDashboard()
-    stats.value = data.stats
-    todos.value = data.todos
-    visitTasks.value = data.visitTasks || []
+    const data = await fetchDashboard();
+    stats.value = data.stats;
+    todos.value = data.todos;
+    visitTasks.value = data.visitTasks || [];
   } catch (e) {
-    uni.showToast({ title: e.message || '加载失败', icon: 'none' })
+    uni.showToast({ title: e.message || "加载失败", icon: "none" });
   } finally {
-    uni.stopPullDownRefresh()
+    uni.stopPullDownRefresh();
   }
 }
 
 function switchTo(url) {
-  uni.switchTab({ url })
+  console.log("url=========================>", url);
+  uni.switchTab({ url });
 }
 
 function goSearch() {
-  uni.switchTab({ url: '/pages/customer/list' })
+  uni.switchTab({ url: "/pages/customer/list" });
 }
 
 function onTodoClick(item) {
-  uni.navigateTo({ url: `/pages/customer/detail?id=${item.customerId}` })
+  uni.navigateTo({ url: `/pages/customer/detail?id=${item.customerId}` });
 }
+onShow(() => {
+  console.log("process.env", import.meta.env.BASE_URL);
+  fetchDashboardOverview();
+});
+async function fetchDashboardOverview() {
+  let res = await getDashboardOverview({});
 
-onMounted(loadData)
-onPullDownRefresh(loadData)
+  stats.value = res;
+  console.log("res", res);
+}
+onMounted(loadData);
+onPullDownRefresh(loadData);
 </script>
 
 <style scoped>

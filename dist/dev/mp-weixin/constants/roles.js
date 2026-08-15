@@ -1,12 +1,12 @@
 "use strict";
 const ROLES = {
   SALES: "sales",
-  MANAGER: "manager",
+  SERVICE: "service",
   ADMIN: "admin"
 };
 const ROLE_LABELS = {
   [ROLES.SALES]: "销售人员",
-  [ROLES.MANAGER]: "销售主管",
+  [ROLES.SERVICE]: "客服人员",
   [ROLES.ADMIN]: "管理员"
 };
 exports.ROLES = ROLES;
