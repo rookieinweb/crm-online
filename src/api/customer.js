@@ -4,9 +4,9 @@ import {
   mockCreateCustomer,
   mockUpdateCustomer
 } from './mock/data'
-
+import { post, get } from "@/utils/request";
 export function fetchCustomers(params) {
-  return mockGetCustomers(params)
+  return get("/customer/list", params);
 }
 
 export function fetchCustomer(id) {

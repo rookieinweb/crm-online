@@ -39,16 +39,20 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, computed } from 'vue'
 import { onShow, onPullDownRefresh } from '@dcloudio/uni-app'
 import { fetchCustomers } from '@/api/customer'
 import { useTabBar } from '@/composables/useTabBar'
+import { useUserStore } from "@/store/user";
 import SearchBar from '@/components/SearchBar/SearchBar.vue'
 import CustomerItem from '@/components/CustomerItem/CustomerItem.vue'
 import EmptyState from '@/components/EmptyState/EmptyState.vue'
 
 useTabBar(1)
 
+const userStore = useUserStore();
+console.log('userStore',userStore.profile)
+const userId = computed(() => userStore.profile.id);
 const keyword = ref('')
 const status = ref('all')
 const list = ref([])
@@ -65,7 +69,7 @@ const tabs = [
 async function loadList() {
   loading.value = true
   try {
-    const res = await fetchCustomers({ keyword: keyword.value, status: status.value })
+    const res = await fetchCustomers({ page: 1, size: 10})
     list.value = res.list
   } catch (e) {
     uni.showToast({ title: e.message || '加载失败', icon: 'none' })

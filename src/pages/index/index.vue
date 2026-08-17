@@ -35,7 +35,7 @@
       <StatCard
         label="成交金额"
         icon="¥"
-        :value="formatCompactMoney(stats.dealAmount)"
+        :value="formatCompactMoney(stats.DealNum)"
         trend="+12%"
         @click.native="switchTo('/pages/mine/index')"
       />
@@ -142,6 +142,7 @@ function onTodoClick(item) {
 onShow(() => {
   console.log("process.env", import.meta.env.BASE_URL);
   fetchDashboardOverview();
+  loadData()
 });
 async function fetchDashboardOverview() {
   let res = await getDashboardOverview({});
@@ -149,7 +150,6 @@ async function fetchDashboardOverview() {
   stats.value = res;
   console.log("res", res);
 }
-onMounted(loadData);
 onPullDownRefresh(loadData);
 </script>
 

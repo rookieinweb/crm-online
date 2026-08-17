@@ -217,22 +217,6 @@ async function mockGetDashboard() {
     })
   };
 }
-async function mockGetCustomers(params = {}) {
-  await delay();
-  let list = [...customers];
-  const { keyword, status } = params;
-  if (status && status !== "all") {
-    list = list.filter((item) => item.status === status);
-  }
-  if (keyword) {
-    const kw = keyword.trim().toLowerCase();
-    list = list.filter(
-      (item) => item.name.toLowerCase().includes(kw) || item.contactName.toLowerCase().includes(kw) || item.contactPhone.includes(kw)
-    );
-  }
-  list.sort((a, b) => new Date(b.updatedAt || b.lastFollowAt || 0) - new Date(a.updatedAt || a.lastFollowAt || 0));
-  return { list, total: list.length };
-}
 async function mockGetCustomer(id) {
   await delay();
   const customer = customers.find((item) => item.id === id);
@@ -297,7 +281,6 @@ async function mockCheckin(taskId) {
 exports.mockCheckin = mockCheckin;
 exports.mockCreateCustomer = mockCreateCustomer;
 exports.mockGetCustomer = mockGetCustomer;
-exports.mockGetCustomers = mockGetCustomers;
 exports.mockGetDashboard = mockGetDashboard;
 exports.mockGetFollowRecords = mockGetFollowRecords;
 exports.mockGetVisitTasks = mockGetVisitTasks;

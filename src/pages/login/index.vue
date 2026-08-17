@@ -78,6 +78,7 @@ onMounted(() => {
 
 function normalizeLoginPayload(payload) {
   const data = payload?.data !== undefined ? payload.data : payload;
+  console.log("data====================================", data);
   const token =
     data?.token || data?.accessToken || data?.access_token || data?.jwt || "";
   const profile = data?.user ||

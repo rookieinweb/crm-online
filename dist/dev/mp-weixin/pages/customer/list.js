@@ -2,6 +2,7 @@
 const common_vendor = require("../../common/vendor.js");
 const api_customer = require("../../api/customer.js");
 const composables_useTabBar = require("../../composables/useTabBar.js");
+const store_user = require("../../store/user.js");
 if (!Math) {
   (SearchBar + CustomerItem + EmptyState)();
 }
@@ -12,6 +13,9 @@ const _sfc_main = {
   __name: "list",
   setup(__props) {
     composables_useTabBar.useTabBar(1);
+    const userStore = store_user.useUserStore();
+    console.log("userStore", userStore.profile);
+    common_vendor.computed(() => userStore.profile.id);
     const keyword = common_vendor.ref("");
     const status = common_vendor.ref("all");
     const list = common_vendor.ref([]);
@@ -26,7 +30,7 @@ const _sfc_main = {
     async function loadList() {
       loading.value = true;
       try {
-        const res = await api_customer.fetchCustomers({ keyword: keyword.value, status: status.value });
+        const res = await api_customer.fetchCustomers({ page: 1, size: 10 });
         list.value = res.list;
       } catch (e) {
         common_vendor.index.showToast({ title: e.message || "加载失败", icon: "none" });

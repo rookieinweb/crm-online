@@ -25,6 +25,7 @@ const _sfc_main = {
     });
     function normalizeLoginPayload(payload) {
       const data = (payload == null ? void 0 : payload.data) !== void 0 ? payload.data : payload;
+      console.log("data====================================", data);
       const token = (data == null ? void 0 : data.token) || (data == null ? void 0 : data.accessToken) || (data == null ? void 0 : data.access_token) || (data == null ? void 0 : data.jwt) || "";
       const profile = (data == null ? void 0 : data.user) || (data == null ? void 0 : data.userInfo) || (data == null ? void 0 : data.profile) || (data == null ? void 0 : data.account) || {
         id: (data == null ? void 0 : data.userId) || "u001",

@@ -5,13 +5,6 @@ var define_import_meta_env_default = { VITE_API_URL: "http://127.0.0.1:7001", VI
 const BASE_URL = "http://127.0.0.1:7001";
 console.log("import.meta.env", define_import_meta_env_default);
 console.log("BASE_URL", BASE_URL);
-function goLogin() {
-  const pages = typeof getCurrentPages === "function" ? getCurrentPages() : [];
-  const current = pages[pages.length - 1];
-  if ((current == null ? void 0 : current.route) === "pages/login/index")
-    return;
-  common_vendor.index.reLaunch({ url: "/pages/login/index" });
-}
 function request(options) {
   console.log("BASE_URL", BASE_URL, options.url);
   return new Promise((resolve, reject) => {
@@ -27,12 +20,6 @@ function request(options) {
       },
       success(res) {
         const { statusCode, data } = res;
-        if (statusCode === 401) {
-          utils_auth.clearToken();
-          goLogin();
-          reject(new Error("登录已过期"));
-          return;
-        }
         if (statusCode >= 200 && statusCode < 300) {
           resolve((data == null ? void 0 : data.data) !== void 0 ? data.data : data);
           return;

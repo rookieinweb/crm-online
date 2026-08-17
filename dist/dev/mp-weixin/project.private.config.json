@@ -1,0 +1,16 @@
+{
+  "libVersion": "3.17.0",
+  "condition": {
+    "miniprogram": {
+      "list": [
+        {
+          "name": "pages/customer/list",
+          "pathName": "pages/customer/list",
+          "query": "",
+          "scene": null,
+          "launchMode": "default"
+        }
+      ]
+    }
+  }
+}

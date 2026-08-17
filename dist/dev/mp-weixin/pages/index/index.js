@@ -54,13 +54,13 @@ const _sfc_main = {
     common_vendor.onShow(() => {
       console.log("process.env", "/");
       fetchDashboardOverview();
+      loadData();
     });
     async function fetchDashboardOverview() {
       let res = await api_auth.getDashboardOverview({});
       stats.value = res;
       console.log("res", res);
     }
-    common_vendor.onMounted(loadData);
     common_vendor.onPullDownRefresh(loadData);
     return (_ctx, _cache) => {
       return {
@@ -87,19 +87,19 @@ const _sfc_main = {
           icon: "访",
           value: stats.value.todayVisitCount
         }),
-        k: common_vendor.o(($event) => switchTo("/pages/mine/index"), "a9"),
+        k: common_vendor.o(($event) => switchTo("/pages/mine/index"), "88"),
         l: common_vendor.p({
           label: "成交金额",
           icon: "¥",
-          value: common_vendor.unref(utils_format.formatCompactMoney)(stats.value.dealAmount),
+          value: common_vendor.unref(utils_format.formatCompactMoney)(stats.value.DealNum),
           trend: "+12%"
         }),
-        m: common_vendor.o(($event) => switchTo("/pages/follow/list"), "b9"),
-        n: common_vendor.o(onTodoClick, "fd"),
+        m: common_vendor.o(($event) => switchTo("/pages/follow/list"), "ce"),
+        n: common_vendor.o(onTodoClick, "85"),
         o: common_vendor.p({
           items: todos.value
         }),
-        p: common_vendor.o(($event) => switchTo("/pages/visit/today"), "d5"),
+        p: common_vendor.o(($event) => switchTo("/pages/visit/today"), "42"),
         q: common_vendor.f(visitTasks.value, (task, k0, i0) => {
           return {
             a: common_vendor.t(common_vendor.unref(utils_format.formatDate)(task.planAt, "HH:mm")),

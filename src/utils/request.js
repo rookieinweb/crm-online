@@ -25,12 +25,12 @@ function request(options) {
       },
       success(res) {
         const { statusCode, data } = res;
-        if (statusCode === 401) {
-          clearToken();
-          goLogin();
-          reject(new Error("登录已过期"));
-          return;
-        }
+        // if (statusCode === 401) {
+        //   clearToken();
+        //   goLogin();
+        //   reject(new Error("登录已过期"));
+        //   return;
+        // }
         if (statusCode >= 200 && statusCode < 300) {
           resolve(data?.data !== undefined ? data.data : data);
           return;
