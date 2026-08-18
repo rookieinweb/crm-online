@@ -13,9 +13,9 @@ if (!Math) {
   "./pages/mine/index.js";
 }
 const _sfc_main = {
-  onLaunch() {
-    console.log("智客Online销售端启动");
-    if (utils_auth.getToken()) {
+  onLaunch(params) {
+    console.log("智客Online销售端启动", params);
+    if (utils_auth.getToken() && params.path == "pages/login/index") {
       setTimeout(() => {
         common_vendor.index.reLaunch({ url: "/pages/index/index" });
       }, 0);

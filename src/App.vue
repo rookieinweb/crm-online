@@ -2,9 +2,9 @@
 import { getToken } from '@/utils/auth'
 
 export default {
-  onLaunch() {
-    console.log('智客Online销售端启动')
-    if (getToken()) {
+  onLaunch(params) {
+    console.log('智客Online销售端启动',params)
+    if (getToken() && params.path == 'pages/login/index') {
       setTimeout(() => {
         uni.reLaunch({ url: '/pages/index/index' })
       }, 0)

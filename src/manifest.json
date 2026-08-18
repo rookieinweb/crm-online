@@ -11,7 +11,15 @@
       "urlCheck": false
     },
     "usingComponents": true,
-    "mergeVirtualHostAttributes": true
+    "mergeVirtualHostAttributes": true,
+    "permission": {
+      "scope.userLocation": {
+        "desc": "用于销售拜访时定位签到，判断是否在客户公司一公里范围内"
+      }
+    },
+    "requiredPrivateInfos": [
+      "getLocation"
+    ]
   },
   "uniStatistics": {
     "enable": false

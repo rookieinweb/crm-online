@@ -19,6 +19,7 @@ const _sfc_main = {
     const keyword = common_vendor.ref("");
     const status = common_vendor.ref("all");
     const list = common_vendor.ref([]);
+    const total = common_vendor.ref(0);
     const loading = common_vendor.ref(false);
     const tabs = [
       { label: "全部", value: "all" },
@@ -32,6 +33,7 @@ const _sfc_main = {
       try {
         const res = await api_customer.fetchCustomers({ page: 1, size: 10 });
         list.value = res.list;
+        total.value = res.total;
       } catch (e) {
         common_vendor.index.showToast({ title: e.message || "加载失败", icon: "none" });
       } finally {
@@ -68,7 +70,7 @@ const _sfc_main = {
             d: common_vendor.o(($event) => changeStatus(tab.value), tab.value)
           };
         }),
-        e: common_vendor.t(list.value.length),
+        e: common_vendor.t(total.value.value),
         f: common_vendor.f(list.value, (item, k0, i0) => {
           return {
             a: item.id,

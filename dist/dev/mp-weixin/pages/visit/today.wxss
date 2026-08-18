@@ -14,6 +14,21 @@
   background: #0f172a;
   color: #ffffff;
 }
+.map-grid.data-v-85abffd6 {
+  display: grid;
+  grid-template-columns: repeat(1, 1fr);
+  gap: 12rpx;
+  margin-top: 22rpx;
+}
+.map-grid text.data-v-85abffd6 {
+  height: 64rpx;
+  line-height: 64rpx;
+  text-align: center;
+  border-radius: 12rpx;
+  background: rgba(255, 255, 255, 0.12);
+  font-size: 24rpx;
+  font-weight: 700;
+}
 .panel.data-v-85abffd6 {
   background: #ffffff;
   border: 1rpx solid #e8edf5;
@@ -29,21 +44,6 @@
   font-size: 24rpx;
   color: #cbd5e1;
   line-height: 1.5;
-}
-.map-grid.data-v-85abffd6 {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 12rpx;
-  margin-top: 22rpx;
-}
-.map-grid text.data-v-85abffd6 {
-  height: 64rpx;
-  line-height: 64rpx;
-  text-align: center;
-  border-radius: 12rpx;
-  background: rgba(255, 255, 255, 0.12);
-  font-size: 24rpx;
-  font-weight: 700;
 }
 .section-header.data-v-85abffd6,
 .task.data-v-85abffd6,
@@ -115,7 +115,7 @@
   color: #94a3b8;
 }
 .check-btn.data-v-85abffd6 {
-  width: 96rpx;
+  width: 108rpx;
   height: 60rpx;
   line-height: 60rpx;
   border-radius: 14rpx;
@@ -128,6 +128,10 @@
 .check-btn.done.data-v-85abffd6 {
   background: #d1fae5;
   color: #047857;
+}
+.check-btn.loading.data-v-85abffd6 {
+  background: #cbd5e1;
+  color: #475569;
 }
 .valid.data-v-85abffd6 {
   padding: 6rpx 12rpx;

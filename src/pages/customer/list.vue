@@ -20,7 +20,7 @@
     </view>
 
     <view class="summary">
-      <text>当前 {{ list.length }} 个客户</text>
+      <text>当前 {{ total.value }} 个客户</text>
       <text>按最近跟进排序</text>
     </view>
 
@@ -56,6 +56,7 @@ const userId = computed(() => userStore.profile.id);
 const keyword = ref('')
 const status = ref('all')
 const list = ref([])
+const total = ref(0)
 const loading = ref(false)
 
 const tabs = [
@@ -71,6 +72,7 @@ async function loadList() {
   try {
     const res = await fetchCustomers({ page: 1, size: 10})
     list.value = res.list
+    total.value = res.total
   } catch (e) {
     uni.showToast({ title: e.message || '加载失败', icon: 'none' })
   } finally {

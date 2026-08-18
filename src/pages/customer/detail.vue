@@ -2,16 +2,16 @@
   <view class="detail-page">
     <view v-if="customer" class="hero">
       <view class="hero-top">
-        <text class="name">{{ customer.name }}</text>
-        <text class="level">{{ customer.level }}级</text>
+        <text class="name">{{ customer.customer_no }}</text>
+        <text class="level">{{ customer.customer_level }}级</text>
       </view>
       <view class="hero-meta">
-        <text>{{ customer.industry }}</text>
-        <text>{{ statusInfo.label }}</text>
+        <text>{{ customer.create_time }}</text>
+        <text>{{ statusInfo.remark }}</text>
       </view>
       <view class="owner-row">
-        <text>负责人：{{ customer.ownerName }}</text>
-        <text>累计成交：{{ formatMoney(customer.dealAmount) }}</text>
+        <text>负责人：{{ customer.owner.username }}</text>
+        <text>累计成交：{{ formatMoney(customer.deal_amount) }}</text>
       </view>
     </view>
 
@@ -22,15 +22,15 @@
       </view>
       <view class="info-row">
         <text class="label">姓名</text>
-        <text class="value">{{ customer.contactName }}</text>
+        <text class="value">{{ customer.customer_name }}</text>
       </view>
       <view class="info-row">
         <text class="label">电话</text>
-        <text class="value">{{ customer.contactPhone }}</text>
+        <text class="value">{{ customer.phone }}</text>
       </view>
       <view class="info-row">
         <text class="label">地址</text>
-        <text class="value">{{ customer.address }}</text>
+        <text class="value">{{ [customer.province, customer.city, customer.address].filter(v => v).join('-') }}</text>
       </view>
       <view class="info-row">
         <text class="label">备注</text>
@@ -47,11 +47,11 @@
         <view class="line-dot" />
         <view class="timeline-body">
           <view class="timeline-head">
-            <text>{{ FOLLOW_TYPES[item.type] }}</text>
-            <text>{{ formatDate(item.createdAt, 'MM月DD日 HH:mm') }}</text>
+            <text>{{ item.title }}</text>
+            <text>{{ formatDate(item.follow_time, 'MM月DD日 HH:mm') }}</text>
           </view>
           <text class="content">{{ item.content }}</text>
-          <text class="next">下次跟进：{{ formatPlanTime(item.nextFollowAt) }}</text>
+          <text class="next">下次跟进：{{ formatPlanTime(item.next_follow_time) }}</text>
         </view>
       </view>
       <EmptyState v-if="!customer.follows.length" text="暂无跟进记录" />
@@ -61,6 +61,7 @@
 
 <script setup>
 import { ref, computed, onMounted } from 'vue'
+import { onShow, onPullDownRefresh } from '@dcloudio/uni-app'
 import { fetchCustomer } from '@/api/customer'
 import { CUSTOMER_STATUS, FOLLOW_TYPES } from '@/constants/status'
 import { formatDate, formatMoney, formatPlanTime } from '@/utils/format'
@@ -84,15 +85,15 @@ async function loadDetail() {
 }
 
 function callPhone() {
-  if (!customer.value?.contactPhone) return
-  uni.makePhoneCall({ phoneNumber: customer.value.contactPhone })
+  if (!customer.value?.phone) return
+  uni.makePhoneCall({ phoneNumber: customer.value.phone })
 }
 
 function goFollow() {
   uni.switchTab({ url: '/pages/follow/list' })
 }
 
-onMounted(loadDetail)
+onShow(loadDetail)
 </script>
 
 <style scoped>

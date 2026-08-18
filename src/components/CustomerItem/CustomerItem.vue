@@ -1,18 +1,18 @@
 <template>
   <view class="customer-item" @click="$emit('click', item)">
     <view class="top">
-      <text class="name">{{ item.name }}</text>
-      <text class="level" :class="'level-' + item.level">{{ item.level }}</text>
+      <text class="name">{{ item.product_name }}</text>
+      <text class="level" :class="'level-' + item.customer_level">{{ item.customer_level }}</text>
     </view>
     <view class="meta">
-      <text class="contact">{{ item.contactName }} · {{ item.contactPhone }}</text>
+      <text class="contact">{{ item.customer_name }} · {{ item.phone }}</text>
       <text class="status" :style="{ color: statusInfo.color, backgroundColor: statusInfo.bg }">
         {{ statusInfo.label }}
       </text>
     </view>
     <view class="footer">
-      <text>{{ item.industry }}</text>
-      <text v-if="item.lastFollowAt">上次跟进：{{ formatDate(item.lastFollowAt) }}</text>
+      <text class="source">{{ [item.province, item.city, item.address].filter(v => v).join('/') }}</text>
+      <text v-if="item.update_time">上次跟进：{{ formatDate(item.update_time) }}</text>
     </view>
   </view>
 </template>
@@ -28,7 +28,7 @@ const props = defineProps({
 
 defineEmits(['click'])
 
-const statusInfo = computed(() => CUSTOMER_STATUS[props.item.status] || CUSTOMER_STATUS.potential)
+const statusInfo = computed(() => CUSTOMER_STATUS[props.item.customer_status] || CUSTOMER_STATUS.potential)
 </script>
 
 <style scoped>
@@ -70,7 +70,9 @@ const statusInfo = computed(() => CUSTOMER_STATUS[props.item.status] || CUSTOMER
   text-align: center;
   flex-shrink: 0;
 }
-
+.source{
+  width: auto;
+}
 .level-A {
   background: #fef3c7;
   color: #b45309;

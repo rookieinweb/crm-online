@@ -34,6 +34,9 @@
   text-align: center;
   flex-shrink: 0;
 }
+.source.data-v-13bd28df{
+  width: auto;
+}
 .level-A.data-v-13bd28df {
   background: #fef3c7;
   color: #b45309;

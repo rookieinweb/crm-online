@@ -4,11 +4,25 @@
     "miniprogram": {
       "list": [
         {
-          "name": "pages/customer/list",
-          "pathName": "pages/customer/list",
+          "name": "pages/visit/today",
+          "pathName": "pages/visit/today",
           "query": "",
           "scene": null,
           "launchMode": "default"
+        },
+        {
+          "name": "pages/customer/detail",
+          "pathName": "pages/customer/detail",
+          "query": "id=31",
+          "launchMode": "default",
+          "scene": null
+        },
+        {
+          "name": "pages/customer/list",
+          "pathName": "pages/customer/list",
+          "query": "",
+          "launchMode": "default",
+          "scene": null
         }
       ]
     }

@@ -15,6 +15,9 @@
     "setting": {
       "urlCheck": false
     },
+    "requiredPrivateInfos": [
+      "getLocation","chooseAddress","chooseLocation","choosePoi","getFuzzyLocation"
+    ],
     "usingComponents": {}
   }
 }

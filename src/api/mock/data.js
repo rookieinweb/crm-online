@@ -145,7 +145,9 @@ let visitTasks = [
     customerName: '南京XX科技有限公司',
     planAt: `${today}T10:30:00`,
     address: '南京市建邺区奥体大街68号',
-    distance: 120,
+    latitude: 32.004,
+    longitude: 118.731,
+    distance: null,
     status: 'pending'
   },
   {
@@ -154,7 +156,9 @@ let visitTasks = [
     customerName: '江苏XX贸易有限公司',
     planAt: `${today}T15:30:00`,
     address: '南京市鼓楼区中山北路100号',
-    distance: 860,
+    latitude: 32.068,
+    longitude: 118.778,
+    distance: null,
     status: 'pending'
   },
   {
@@ -163,6 +167,8 @@ let visitTasks = [
     customerName: '苏州智能制造有限公司',
     planAt: '2026-08-12T10:00:00',
     address: '苏州市工业园区星湖街328号',
+    customerLatitude: 31.316,
+    customerLongitude: 120.718,
     distance: 85,
     status: 'done'
   }
@@ -177,6 +183,8 @@ let visitRecords = [
     latitude: 31.3162,
     longitude: 120.7181,
     address: '苏州市工业园区星湖街328号',
+    customerLatitude: 31.316,
+    customerLongitude: 120.718,
     distance: 85,
     remark: '签约现场拜访',
     isValid: true,
@@ -298,22 +306,25 @@ export async function mockGetVisitTasks() {
   }
 }
 
-export async function mockCheckin(taskId) {
+export async function mockCheckin(taskId, checkinData = {}) {
   await delay()
   const task = visitTasks.find((item) => item.id === taskId)
   if (!task) throw new Error('拜访任务不存在')
   task.status = 'done'
+  task.distance = checkinData.distance ?? task.distance
   const record = {
     id: genId('v'),
     customerId: task.customerId,
     customerName: task.customerName,
     checkinAt: new Date().toISOString(),
-    latitude: 32.004,
-    longitude: 118.731,
+    latitude: checkinData.currentLatitude,
+    longitude: checkinData.currentLongitude,
+    customerLatitude: checkinData.customerLatitude ?? task.latitude,
+    customerLongitude: checkinData.customerLongitude ?? task.longitude,
     address: task.address,
-    distance: task.distance,
-    remark: '定位范围内完成公司签到',
-    isValid: task.distance <= 300,
+    distance: checkinData.distance ?? task.distance,
+    remark: checkinData.remark || '定位范围内完成公司签到',
+    isValid: Boolean(checkinData.isValid),
     creatorId: 'u001',
     creatorName: '张三'
   }
@@ -322,3 +333,6 @@ export async function mockCheckin(taskId) {
 }
 
 export { customers, followRecords, visitTasks, visitRecords }
+
+
+

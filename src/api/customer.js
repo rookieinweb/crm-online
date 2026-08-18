@@ -10,7 +10,7 @@ export function fetchCustomers(params) {
 }
 
 export function fetchCustomer(id) {
-  return mockGetCustomer(id)
+  return get(`/customer/detail/${id}`);
 }
 
 export function createCustomer(data) {
