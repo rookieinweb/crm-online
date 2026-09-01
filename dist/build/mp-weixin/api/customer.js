@@ -1,1 +1,1 @@
-"use strict";const t=require("./mock/data.js");exports.createCustomer=function(e){return t.mockCreateCustomer(e)},exports.fetchCustomer=function(e){return t.mockGetCustomer(e)},exports.fetchCustomers=function(e){return t.mockGetCustomers(e)};
+"use strict";const t=require("./mock/data.js"),e=require("../utils/request.js");exports.createCustomer=function(e){return t.mockCreateCustomer(e)},exports.fetchCustomer=function(t){return e.get(`/customer/detail/${t}`)},exports.fetchCustomers=function(t){return e.get("/customer/list",t)};
