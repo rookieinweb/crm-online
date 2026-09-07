@@ -7,7 +7,7 @@ export default {
     console.log('个人名片小程序显示')
   },
   onHide() {
-    console.log('个人名片小程序隐藏')
+    // console.log('个人名片小程序隐藏')
   }
 }
 </script>
