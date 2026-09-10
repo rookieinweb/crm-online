@@ -3,7 +3,6 @@ import { getToken } from '@/utils/auth'
 
 export default {
   onLaunch(params) {
-    console.log('智客Online销售端启动',params)
     if (getToken() && params.path == 'pages/login/index') {
       setTimeout(() => {
         uni.reLaunch({ url: '/pages/index/index' })
@@ -32,3 +31,4 @@ button::after {
   border: none;
 }
 </style>
+

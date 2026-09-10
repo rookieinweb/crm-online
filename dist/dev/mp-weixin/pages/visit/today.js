@@ -31,7 +31,6 @@ const _sfc_main = {
         };
       });
       records.value = data.records;
-      console.log("records", tasks.value);
     }
     function getCheckinText(task) {
       if (task.status === "done")
@@ -81,7 +80,6 @@ const _sfc_main = {
         task.status = "done";
         common_vendor.index.showToast({ title: "签到成功", icon: "success" });
       } catch (e) {
-        console.log("e===================", e);
         common_vendor.index.showToast({ title: e.message || "签到失败", icon: "none" });
       } finally {
         checkingId.value = "";

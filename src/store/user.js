@@ -1,29 +1,35 @@
-import { defineStore } from "pinia";
-import { getUser, setUser } from "@/utils/auth";
-import { ROLES } from "@/constants/roles";
+import { defineStore } from 'pinia'
+import { getUser, setUser } from '@/utils/auth'
+import { ROLES } from '@/constants/roles'
 
-export const useUserStore = defineStore("user", {
+function normalizeRole(profile) {
+  const role = profile?.role
+  if (typeof role === 'string') return role
+  return role?.role_code || role?.code || ROLES.SALES
+}
+
+export const useUserStore = defineStore('user', {
   state: () => ({
     profile: getUser() || {
-      id: "u001",
-      name: "张三",
-      phone: "13800000000",
+      id: '',
+      account: '',
+      name: '销售人员',
+      nickname: '',
+      phone: '',
       role: ROLES.SALES,
-      avatar: "",
-      teamName: "华东销售一组",
-      account: "",
-    },
+      avatar: '',
+      teamName: '销售一组'
+    }
   }),
   getters: {
-    userName: (state) => state.profile?.account || "销售",
-    role: (state) => state.profile?.role?.role_code || ROLES.SALES,
-    isManager: (state) =>
-      [ROLES.MANAGER, ROLES.ADMIN].includes(state.profile?.role),
+    userName: (state) => state.profile?.nickname || state.profile?.name || state.profile?.account || '销售',
+    role: (state) => normalizeRole(state.profile),
+    isManager: (state) => [ROLES.MANAGER, ROLES.ADMIN].includes(normalizeRole(state.profile))
   },
   actions: {
     setProfile(profile) {
-      this.profile = profile;
-      setUser(profile);
-    },
-  },
-});
+      this.profile = profile
+      setUser(profile)
+    }
+  }
+})

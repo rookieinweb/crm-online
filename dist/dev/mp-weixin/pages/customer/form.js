@@ -2,34 +2,45 @@
 const common_vendor = require("../../common/vendor.js");
 const api_customer = require("../../api/customer.js");
 const constants_status = require("../../constants/status.js");
+const store_user = require("../../store/user.js");
 const _sfc_main = {
   __name: "form",
   setup(__props) {
+    var _a;
+    const userStore = store_user.useUserStore();
     const levels = constants_status.CUSTOMER_LEVELS;
-    const statusOptions = Object.keys(constants_status.CUSTOMER_STATUS);
+    const sourceOptions = ["微信", "官网", "抖音", "线下"];
+    const statusOptions = ["potential", "contacted", "intention", "negotiating", "deal", "lost"];
     const statusLabels = statusOptions.map((key) => constants_status.CUSTOMER_STATUS[key].label);
     const statusIndex = common_vendor.ref(0);
     const saving = common_vendor.ref(false);
     const form = common_vendor.reactive({
-      name: "",
-      contactName: "",
-      contactPhone: "",
-      industry: "",
+      customer_name: "",
+      phone: "",
+      customer_source: "微信",
+      customer_status: "potential",
+      customer_level: "B",
+      product_name: "",
+      province: "",
+      city: "",
       address: "",
-      level: "B",
-      status: "potential",
-      remark: ""
+      owner_id: ((_a = userStore.profile) == null ? void 0 : _a.id) || "",
+      remark: "",
+      deal_amount: 0
     });
+    function onSourceChange(e) {
+      form.customer_source = sourceOptions[e.detail.value];
+    }
     function onLevelChange(e) {
-      form.level = levels[e.detail.value];
+      form.customer_level = levels[e.detail.value];
     }
     function onStatusChange(e) {
       statusIndex.value = Number(e.detail.value);
-      form.status = statusOptions[statusIndex.value];
+      form.customer_status = statusOptions[statusIndex.value];
     }
     async function submit() {
-      if (!form.name || !form.contactName || !form.contactPhone) {
-        common_vendor.index.showToast({ title: "请填写客户名称、联系人和电话", icon: "none" });
+      if (!form.customer_name || !form.phone) {
+        common_vendor.index.showToast({ title: "请填写客户姓名和手机号", icon: "none" });
         return;
       }
       saving.value = true;
@@ -37,7 +48,11 @@ const _sfc_main = {
         const customer = await api_customer.createCustomer({ ...form });
         common_vendor.index.showToast({ title: "保存成功", icon: "success" });
         setTimeout(() => {
-          common_vendor.index.redirectTo({ url: `/pages/customer/detail?id=${customer.id}` });
+          if (customer == null ? void 0 : customer.id) {
+            common_vendor.index.redirectTo({ url: `/pages/customer/detail?id=${customer.id}` });
+          } else {
+            common_vendor.index.switchTab({ url: "/pages/customer/list" });
+          }
         }, 250);
       } catch (e) {
         common_vendor.index.showToast({ title: e.message || "保存失败", icon: "none" });
@@ -46,30 +61,40 @@ const _sfc_main = {
       }
     }
     return (_ctx, _cache) => {
-      return {
-        a: form.name,
-        b: common_vendor.o(($event) => form.name = $event.detail.value, "3a"),
-        c: form.contactName,
-        d: common_vendor.o(($event) => form.contactName = $event.detail.value, "88"),
-        e: form.contactPhone,
-        f: common_vendor.o(($event) => form.contactPhone = $event.detail.value, "cc"),
-        g: form.industry,
-        h: common_vendor.o(($event) => form.industry = $event.detail.value, "7f"),
-        i: form.address,
-        j: common_vendor.o(($event) => form.address = $event.detail.value, "86"),
-        k: common_vendor.t(form.level),
-        l: common_vendor.unref(levels),
-        m: common_vendor.o(onLevelChange, "76"),
-        n: common_vendor.t(common_vendor.unref(statusLabels)[statusIndex.value]),
-        o: common_vendor.unref(statusLabels),
-        p: common_vendor.o(onStatusChange, "78"),
-        q: form.remark,
-        r: common_vendor.o(($event) => form.remark = $event.detail.value, "90"),
-        s: saving.value,
-        t: common_vendor.o(submit, "ae"),
-        v: common_vendor.pvhc(_ctx.$scope.data.virtualHostClass),
-        w: common_vendor.gei(_ctx, "")
-      };
+      return common_vendor.e({
+        a: form.customer_name,
+        b: common_vendor.o(($event) => form.customer_name = $event.detail.value, "3c"),
+        c: form.phone,
+        d: common_vendor.o(($event) => form.phone = $event.detail.value, "54"),
+        e: form.product_name,
+        f: common_vendor.o(($event) => form.product_name = $event.detail.value, "c0"),
+        g: common_vendor.t(form.customer_source),
+        h: sourceOptions,
+        i: common_vendor.o(onSourceChange, "1d"),
+        j: common_vendor.t(form.customer_level || "未选择"),
+        k: common_vendor.unref(levels),
+        l: common_vendor.o(onLevelChange, "29"),
+        m: common_vendor.t(common_vendor.unref(statusLabels)[statusIndex.value]),
+        n: common_vendor.unref(statusLabels),
+        o: common_vendor.o(onStatusChange, "8d"),
+        p: form.province,
+        q: common_vendor.o(($event) => form.province = $event.detail.value, "e3"),
+        r: form.city,
+        s: common_vendor.o(($event) => form.city = $event.detail.value, "23"),
+        t: form.address,
+        v: common_vendor.o(($event) => form.address = $event.detail.value, "0d"),
+        w: form.customer_status === "deal"
+      }, form.customer_status === "deal" ? {
+        x: form.deal_amount,
+        y: common_vendor.o(($event) => form.deal_amount = $event.detail.value, "b8")
+      } : {}, {
+        z: form.remark,
+        A: common_vendor.o(($event) => form.remark = $event.detail.value, "32"),
+        B: saving.value,
+        C: common_vendor.o(submit, "c2"),
+        D: common_vendor.pvhc(_ctx.$scope.data.virtualHostClass),
+        E: common_vendor.gei(_ctx, "")
+      });
     };
   }
 };

@@ -1,12 +1,37 @@
 "use strict";
 const common_vendor = require("../common/vendor.js");
 const utils_auth = require("./auth.js");
-var define_import_meta_env_default = { VITE_API_URL: "http://127.0.0.1:7001", VITE_CJS_IGNORE_WARNING: "true", VITE_ROOT_DIR: "D:\\demo\\wx-uni", VITE_USER_NODE_ENV: "development", BASE_URL: "/", MODE: "development", DEV: true, PROD: false, SSR: false };
-const BASE_URL = "http://127.0.0.1:7001";
-console.log("import.meta.env", define_import_meta_env_default);
-console.log("BASE_URL", BASE_URL);
+const DEFAULT_ERROR_MESSAGE = "请求失败，请稍后重试";
+const BASE_URL = "https://zhikeagent.top/api";
+function goLogin() {
+  const pages = typeof getCurrentPages === "function" ? getCurrentPages() : [];
+  const current = pages[pages.length - 1];
+  if ((current == null ? void 0 : current.route) === "pages/login/index")
+    return;
+  common_vendor.index.reLaunch({ url: "/pages/login/index" });
+}
+function normalizeApiBody(body) {
+  if (body && typeof body === "object" && "code" in body) {
+    if (body.code !== 200) {
+      throw new Error(body.msg || body.message || DEFAULT_ERROR_MESSAGE);
+    }
+    if ("token" in body && "user" in body) {
+      return { token: body.token, user: body.user };
+    }
+    return body.data ?? body.token ?? null;
+  }
+  if (body && typeof body === "object" && "success" in body) {
+    if (!body.success) {
+      throw new Error(body.message || DEFAULT_ERROR_MESSAGE);
+    }
+    return body.data;
+  }
+  return body;
+}
+function getErrorMessage(data, fallback = DEFAULT_ERROR_MESSAGE) {
+  return (data == null ? void 0 : data.message) || (data == null ? void 0 : data.msg) || fallback;
+}
 function request(options) {
-  console.log("BASE_URL", BASE_URL, options.url);
   return new Promise((resolve, reject) => {
     const token = utils_auth.getToken();
     common_vendor.index.request({
@@ -20,14 +45,24 @@ function request(options) {
       },
       success(res) {
         const { statusCode, data } = res;
-        if (statusCode >= 200 && statusCode < 300) {
-          resolve((data == null ? void 0 : data.data) !== void 0 ? data.data : data);
+        if (statusCode === 401) {
+          utils_auth.clearToken();
+          goLogin();
+          reject(new Error("登录已过期，请重新登录"));
           return;
         }
-        reject(new Error((data == null ? void 0 : data.message) || "请求失败"));
+        if (statusCode >= 200 && statusCode < 300) {
+          try {
+            resolve(normalizeApiBody(data));
+          } catch (e) {
+            reject(e);
+          }
+          return;
+        }
+        reject(new Error(getErrorMessage(data)));
       },
       fail(err) {
-        reject(err);
+        reject(new Error(err.errMsg || DEFAULT_ERROR_MESSAGE));
       }
     });
   });

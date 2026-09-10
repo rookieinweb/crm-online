@@ -5,7 +5,6 @@ const api_dashboard = require("../../api/dashboard.js");
 const constants_roles = require("../../constants/roles.js");
 const utils_format = require("../../utils/format.js");
 const composables_useTabBar = require("../../composables/useTabBar.js");
-const api_auth = require("../../api/auth.js");
 if (!Math) {
   (StatCard + TodoList + QuickActions)();
 }
@@ -17,32 +16,32 @@ const _sfc_main = {
   setup(__props) {
     composables_useTabBar.useTabBar(0);
     const userStore = store_user.useUserStore();
-    common_vendor.computed(() => userStore.profile);
     const userName = common_vendor.computed(() => userStore.userName);
-    const roleLabel = common_vendor.computed(() => constants_roles.ROLE_LABELS[userStore.role]);
+    const roleLabel = common_vendor.computed(() => constants_roles.ROLE_LABELS[userStore.role] || "销售人员");
     const todayStr = utils_format.formatTodayHeader();
     const stats = common_vendor.ref({
       effectiveTotal: 0,
       todayCreateNum: 0,
       todayFollowNum: 0,
-      MonthlyTransactionVolume: 0
+      MonthlyTransactionVolume: 0,
+      DealNum: 0
     });
     const todos = common_vendor.ref([]);
-    const visitTasks = common_vendor.ref([]);
     async function loadData() {
       try {
         const data = await api_dashboard.fetchDashboard();
-        stats.value = data.stats;
-        todos.value = data.todos;
-        visitTasks.value = data.visitTasks || [];
+        stats.value = { ...stats.value, ...data.stats || {} };
+        todos.value = data.todos || [];
       } catch (e) {
         common_vendor.index.showToast({ title: e.message || "加载失败", icon: "none" });
       } finally {
         common_vendor.index.stopPullDownRefresh();
       }
     }
+    function refresh() {
+      loadData();
+    }
     function switchTo(url) {
-      console.log("url=========================>", url);
       common_vendor.index.switchTab({ url });
     }
     function goSearch() {
@@ -51,16 +50,7 @@ const _sfc_main = {
     function onTodoClick(item) {
       common_vendor.index.navigateTo({ url: `/pages/customer/detail?id=${item.customerId}` });
     }
-    common_vendor.onShow(() => {
-      console.log("process.env", "/");
-      fetchDashboardOverview();
-      loadData();
-    });
-    async function fetchDashboardOverview() {
-      let res = await api_auth.getDashboardOverview({});
-      stats.value = res;
-      console.log("res", res);
-    }
+    common_vendor.onShow(loadData);
     common_vendor.onPullDownRefresh(loadData);
     return (_ctx, _cache) => {
       return {
@@ -68,50 +58,40 @@ const _sfc_main = {
         b: common_vendor.o(goSearch, "c0"),
         c: common_vendor.t(userName.value),
         d: common_vendor.t(common_vendor.unref(todayStr)),
-        e: common_vendor.o(($event) => switchTo("/pages/customer/list"), "04"),
+        e: common_vendor.o(($event) => switchTo("/pages/customer/list"), "5f"),
         f: common_vendor.p({
-          label: "我的客户",
+          label: "客户总数",
           icon: "客",
-          value: stats.value.effectiveTotal,
-          trend: "+8%"
+          value: stats.value.effectiveTotal
         }),
-        g: common_vendor.o(($event) => switchTo("/pages/follow/list"), "78"),
+        g: common_vendor.o(($event) => switchTo("/pages/customer/list"), "aa"),
         h: common_vendor.p({
+          label: "今日新增",
+          icon: "新",
+          value: stats.value.todayCreateNum
+        }),
+        i: common_vendor.o(($event) => switchTo("/pages/follow/list"), "d3"),
+        j: common_vendor.p({
           label: "今日待跟进",
           icon: "跟",
           value: stats.value.todayFollowNum
         }),
-        i: common_vendor.o(($event) => switchTo("/pages/visit/today"), "e9"),
-        j: common_vendor.p({
-          label: "今日拜访",
-          icon: "访",
-          value: stats.value.todayVisitCount
-        }),
-        k: common_vendor.o(($event) => switchTo("/pages/mine/index"), "88"),
+        k: common_vendor.o(($event) => switchTo("/pages/mine/index"), "4d"),
         l: common_vendor.p({
-          label: "成交金额",
-          icon: "¥",
-          value: common_vendor.unref(utils_format.formatCompactMoney)(stats.value.DealNum),
-          trend: "+12%"
+          label: "成交客户",
+          icon: "成",
+          value: stats.value.MonthlyTransactionVolume
         }),
-        m: common_vendor.o(($event) => switchTo("/pages/follow/list"), "ce"),
-        n: common_vendor.o(onTodoClick, "85"),
+        m: common_vendor.o(($event) => switchTo("/pages/follow/list"), "0f"),
+        n: common_vendor.o(onTodoClick, "57"),
         o: common_vendor.p({
           items: todos.value
         }),
-        p: common_vendor.o(($event) => switchTo("/pages/visit/today"), "42"),
-        q: common_vendor.f(visitTasks.value, (task, k0, i0) => {
-          return {
-            a: common_vendor.t(common_vendor.unref(utils_format.formatDate)(task.planAt, "HH:mm")),
-            b: common_vendor.t(task.customerName),
-            c: common_vendor.t(task.address),
-            d: common_vendor.t(task.status === "done" ? "已签" : "待签"),
-            e: common_vendor.n(task.status),
-            f: task.id
-          };
-        }),
-        r: common_vendor.pvhc(_ctx.$scope.data.virtualHostClass),
-        s: common_vendor.gei(_ctx, "")
+        p: common_vendor.o(refresh, "e5"),
+        q: common_vendor.t(stats.value.MonthlyTransactionVolume || 0),
+        r: common_vendor.t(common_vendor.unref(utils_format.formatCompactMoney)(stats.value.DealNum || 0)),
+        s: common_vendor.pvhc(_ctx.$scope.data.virtualHostClass),
+        t: common_vendor.gei(_ctx, "")
       };
     };
   }

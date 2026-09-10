@@ -47,7 +47,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref } from 'vue'
 import { useTabBar } from '@/composables/useTabBar'
 import { formatDate } from '@/utils/format'
 import {
@@ -59,7 +59,7 @@ import {
 } from '@/utils/location'
 import { mockCheckin, mockGetVisitTasks } from '@/api/mock/data'
 import EmptyState from '@/components/EmptyState/EmptyState.vue'
-import { onShow,onLoad, onPullDownRefresh } from '@dcloudio/uni-app'
+import { onShow } from '@dcloudio/uni-app'
 
 useTabBar(3)
 
@@ -82,7 +82,6 @@ async function loadData() {
     }
   })
   records.value = data.records
-  console.log('records',tasks.value)
 }
 
 function getCheckinText(task) {
@@ -135,7 +134,6 @@ async function checkin(task) {
     task.status = 'done'
     uni.showToast({ title: '签到成功', icon: 'success' })
   } catch (e) {
-    console.log('e===================',e)
     uni.showToast({ title: e.message || '签到失败', icon: 'none' })
   } finally {
     checkingId.value = ''
@@ -318,3 +316,4 @@ onShow(async () => {
   color: #dc2626;
 }
 </style>
+

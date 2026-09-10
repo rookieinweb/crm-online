@@ -34,6 +34,10 @@ const _sfc_main = {
       common_vendor.index.makePhoneCall({ phoneNumber: customer.value.phone });
     }
     function goFollow() {
+      var _a;
+      if ((_a = customer.value) == null ? void 0 : _a.id) {
+        common_vendor.index.setStorageSync("zhike_follow_customer_id", customer.value.id);
+      }
       common_vendor.index.switchTab({ url: "/pages/follow/list" });
     }
     common_vendor.onShow(loadDetail);
@@ -41,30 +45,30 @@ const _sfc_main = {
       return common_vendor.e({
         a: customer.value
       }, customer.value ? {
-        b: common_vendor.t(customer.value.customer_no),
-        c: common_vendor.t(customer.value.customer_level),
-        d: common_vendor.t(customer.value.create_time),
-        e: common_vendor.t(statusInfo.value.remark),
-        f: common_vendor.t(customer.value.owner.username),
-        g: common_vendor.t(common_vendor.unref(utils_format.formatMoney)(customer.value.deal_amount))
+        b: common_vendor.t(customer.value.product_name || customer.value.name),
+        c: common_vendor.t(customer.value.level),
+        d: common_vendor.t(customer.value.customer_source || "-"),
+        e: common_vendor.t(statusInfo.value.label),
+        f: common_vendor.t(customer.value.ownerName || "-"),
+        g: common_vendor.t(common_vendor.unref(utils_format.formatMoney)(customer.value.dealAmount))
       } : {}, {
         h: customer.value
       }, customer.value ? {
-        i: common_vendor.o(callPhone, "1f"),
-        j: common_vendor.t(customer.value.customer_name),
-        k: common_vendor.t(customer.value.phone),
-        l: common_vendor.t([customer.value.province, customer.value.city, customer.value.address].filter((v) => v).join("-")),
+        i: common_vendor.o(callPhone, "98"),
+        j: common_vendor.t(customer.value.customer_name || "-"),
+        k: common_vendor.t(customer.value.phone || "-"),
+        l: common_vendor.t(customer.value.fullAddress || "暂无"),
         m: common_vendor.t(customer.value.remark || "暂无")
       } : {}, {
         n: customer.value
       }, customer.value ? common_vendor.e({
-        o: common_vendor.o(goFollow, "7b"),
+        o: common_vendor.o(goFollow, "99"),
         p: common_vendor.f(customer.value.follows, (item, k0, i0) => {
           return {
-            a: common_vendor.t(item.title),
-            b: common_vendor.t(common_vendor.unref(utils_format.formatDate)(item.follow_time, "MM月DD日 HH:mm")),
-            c: common_vendor.t(item.content),
-            d: common_vendor.t(common_vendor.unref(utils_format.formatPlanTime)(item.next_follow_time)),
+            a: common_vendor.t(item.typeLabel),
+            b: common_vendor.t(common_vendor.unref(utils_format.formatDate)(item.createdAt, "MM月DD日 HH:mm")),
+            c: common_vendor.t(item.content || "暂无内容"),
+            d: common_vendor.t(common_vendor.unref(utils_format.formatPlanTime)(item.nextFollowAt)),
             e: item.id
           };
         }),

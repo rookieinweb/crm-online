@@ -11,7 +11,7 @@
       <view class="field">
         <text class="label">账号</text>
         <input
-          v-model="form.username"
+          v-model="form.account"
           class="input"
           placeholder="请输入账号"
           placeholder-class="placeholder"
@@ -41,7 +41,6 @@
           />
           <text>记住账号</text>
         </label>
-        <!-- <text class="hint">接口参考 `/auth/login`</text> -->
       </view>
 
       <button class="login-btn" :loading="loading" @click="handleLogin">
@@ -52,81 +51,73 @@
 </template>
 
 <script setup>
-import { reactive, ref, onMounted } from "vue";
-import { login } from "@/api/auth";
-import { onShow } from "@dcloudio/uni-app";
-import { setToken, setUser } from "@/utils/auth";
-import { useUserStore } from "@/store/user";
-import { ROLES } from "@/constants/roles";
+import { reactive, ref, onMounted } from 'vue'
+import { login } from '@/api/auth'
+import { setToken, setUser } from '@/utils/auth'
+import { useUserStore } from '@/store/user'
+import { ROLES } from '@/constants/roles'
 
-const userStore = useUserStore();
-const loading = ref(false);
+const userStore = useUserStore()
+const loading = ref(false)
 
 const form = reactive({
-  username: "",
-  password: "",
-  remember: true,
-});
+  account: '',
+  password: '',
+  remember: true
+})
 
-onShow(() => {
-  console.log(import.meta.env);
-});
 onMounted(() => {
-  const saved = uni.getStorageSync("zhike_login_username");
-  if (saved) form.username = saved;
-});
+  const saved = uni.getStorageSync('zhike_login_account')
+  if (saved) form.account = saved
+})
 
-function normalizeLoginPayload(payload) {
-  const data = payload?.data !== undefined ? payload.data : payload;
-  console.log("data====================================", data);
-  const token =
-    data?.token || data?.accessToken || data?.access_token || data?.jwt || "";
-  const profile = data?.user ||
-    data?.userInfo ||
-    data?.profile ||
-    data?.account || {
-      id: data?.userId || "u001",
-      name: form.account || "销售人员",
-      phone: data?.phone || "",
-      role: data?.role || ROLES.SALES,
-      avatar: "",
-      teamName: data?.teamName || "销售一组",
-    };
-
-  return { token, profile };
+function normalizeProfile(user = {}) {
+  return {
+    id: user.id || '',
+    account: user.account || form.account,
+    name: user.name || user.nickname || user.username || form.account,
+    nickname: user.nickname || '',
+    phone: user.phone || '',
+    role: user.role || ROLES.SALES,
+    avatar: user.avatar || '',
+    teamName: user.teamName || user.team_name || '销售一组',
+    ...user
+  }
 }
 
 async function handleLogin() {
-  if (!form.username || !form.password) {
-    uni.showToast({ title: "请输入账号和密码", icon: "none" });
-    return;
+  if (!form.account || !form.password) {
+    uni.showToast({ title: '请输入账号和密码', icon: 'none' })
+    return
   }
 
-  loading.value = true;
+  loading.value = true
   try {
     const res = await login({
-      username: form.username,
-      password: form.password,
-    });
-    console.log("res====================================", res);
-    const { token, profile } = normalizeLoginPayload(res);
+      account: form.account,
+      password: form.password
+    })
+    const token = res?.token || res?.accessToken || res?.access_token || res?.jwt || ''
     if (!token) {
-      throw new Error("登录接口未返回 token");
+      throw new Error('登录接口未返回 token')
     }
-    setToken(token);
-    setUser(profile);
-    userStore.setProfile(profile);
+
+    const profile = normalizeProfile(res?.user || res?.userInfo || res?.profile || {})
+    setToken(token)
+    setUser(profile)
+    userStore.setProfile(profile)
+
     if (form.remember) {
-      uni.setStorageSync("zhike_login_username", form.username);
+      uni.setStorageSync('zhike_login_account', form.account)
     } else {
-      uni.removeStorageSync("zhike_login_username");
+      uni.removeStorageSync('zhike_login_account')
     }
-    uni.reLaunch({ url: "/pages/index/index" });
+
+    uni.reLaunch({ url: '/pages/index/index' })
   } catch (e) {
-    console.log("e====================================", e);
-    uni.showToast({ title: e.message || "登录失败", icon: "none" });
+    uni.showToast({ title: e.message || '登录失败', icon: 'none' })
   } finally {
-    loading.value = false;
+    loading.value = false
   }
 }
 </script>
@@ -215,11 +206,6 @@ async function handleLogin() {
   gap: 10rpx;
   font-size: 24rpx;
   color: #475569;
-}
-
-.hint {
-  font-size: 22rpx;
-  color: #94a3b8;
 }
 
 .login-btn {

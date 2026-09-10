@@ -13,40 +13,16 @@
     </view>
 
     <view class="stats-grid">
-      <StatCard
-        label="我的客户"
-        icon="客"
-        :value="stats.effectiveTotal"
-        trend="+8%"
-        @click.native="switchTo('/pages/customer/list')"
-      />
-      <StatCard
-        label="今日待跟进"
-        icon="跟"
-        :value="stats.todayFollowNum"
-        @click.native="switchTo('/pages/follow/list')"
-      />
-      <StatCard
-        label="今日拜访"
-        icon="访"
-        :value="stats.todayVisitCount"
-        @click.native="switchTo('/pages/visit/today')"
-      />
-      <StatCard
-        label="成交金额"
-        icon="¥"
-        :value="formatCompactMoney(stats.DealNum)"
-        trend="+12%"
-        @click.native="switchTo('/pages/mine/index')"
-      />
+      <StatCard label="客户总数" icon="客" :value="stats.effectiveTotal" @click="switchTo('/pages/customer/list')" />
+      <StatCard label="今日新增" icon="新" :value="stats.todayCreateNum" @click="switchTo('/pages/customer/list')" />
+      <StatCard label="今日待跟进" icon="跟" :value="stats.todayFollowNum" @click="switchTo('/pages/follow/list')" />
+      <StatCard label="成交客户" icon="成" :value="stats.MonthlyTransactionVolume" @click="switchTo('/pages/mine/index')" />
     </view>
 
     <view class="section panel">
       <view class="section-header">
         <text class="section-title">今日待办</text>
-        <text class="section-link" @click="switchTo('/pages/follow/list')"
-          >全部</text
-        >
+        <text class="section-link" @click="switchTo('/pages/follow/list')">全部</text>
       </view>
       <TodoList :items="todos" @item-click="onTodoClick" />
     </view>
@@ -60,97 +36,79 @@
 
     <view class="section panel">
       <view class="section-header">
-        <text class="section-title">今日拜访</text>
-        <text class="section-link" @click="switchTo('/pages/visit/today')"
-          >打卡</text
-        >
+        <text class="section-title">销售概览</text>
+        <text class="section-link" @click="refresh">刷新</text>
       </view>
-      <view v-for="task in visitTasks" :key="task.id" class="visit-row">
-        <view class="visit-time">{{ formatDate(task.planAt, "HH:mm") }}</view>
-        <view class="visit-info">
-          <text class="visit-name">{{ task.customerName }}</text>
-          <text class="visit-address">{{ task.address }}</text>
-        </view>
-        <text class="visit-status" :class="task.status">{{
-          task.status === "done" ? "已签" : "待签"
-        }}</text>
+      <view class="overview-row">
+        <text>本月成交</text>
+        <text>{{ stats.MonthlyTransactionVolume || 0 }} 个客户</text>
+      </view>
+      <view class="overview-row">
+        <text>成交金额</text>
+        <text>{{ formatCompactMoney(stats.DealNum || 0) }}</text>
       </view>
     </view>
   </view>
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from "vue";
-import { onPullDownRefresh, onShow } from "@dcloudio/uni-app";
-import { useUserStore } from "@/store/user";
-import { fetchDashboard } from "@/api/dashboard";
-import { ROLE_LABELS } from "@/constants/roles";
-import {
-  formatCompactMoney,
-  formatDate,
-  formatTodayHeader,
-} from "@/utils/format";
-import { useTabBar } from "@/composables/useTabBar";
-import StatCard from "@/components/StatCard/StatCard.vue";
-import TodoList from "@/components/TodoList/TodoList.vue";
-import QuickActions from "@/components/QuickActions/QuickActions.vue";
+import { ref, computed } from 'vue'
+import { onPullDownRefresh, onShow } from '@dcloudio/uni-app'
+import { useUserStore } from '@/store/user'
+import { fetchDashboard } from '@/api/dashboard'
+import { ROLE_LABELS } from '@/constants/roles'
+import { formatCompactMoney, formatTodayHeader } from '@/utils/format'
+import { useTabBar } from '@/composables/useTabBar'
+import StatCard from '@/components/StatCard/StatCard.vue'
+import TodoList from '@/components/TodoList/TodoList.vue'
+import QuickActions from '@/components/QuickActions/QuickActions.vue'
 
-import { getDashboardOverview } from "@/api/auth";
+useTabBar(0)
 
-useTabBar(0);
-
-const userStore = useUserStore();
-const profile = computed(() => userStore.profile);
-const userName = computed(() => userStore.userName);
-const roleLabel = computed(() => ROLE_LABELS[userStore.role]);
-const todayStr = formatTodayHeader();
+const userStore = useUserStore()
+const userName = computed(() => userStore.userName)
+const roleLabel = computed(() => ROLE_LABELS[userStore.role] || '销售人员')
+const todayStr = formatTodayHeader()
 
 const stats = ref({
   effectiveTotal: 0,
   todayCreateNum: 0,
   todayFollowNum: 0,
   MonthlyTransactionVolume: 0,
-});
-const todos = ref([]);
-const visitTasks = ref([]);
+  DealNum: 0
+})
+const todos = ref([])
 
 async function loadData() {
   try {
-    const data = await fetchDashboard();
-    stats.value = data.stats;
-    todos.value = data.todos;
-    visitTasks.value = data.visitTasks || [];
+    const data = await fetchDashboard()
+    stats.value = { ...stats.value, ...(data.stats || {}) }
+    todos.value = data.todos || []
   } catch (e) {
-    uni.showToast({ title: e.message || "加载失败", icon: "none" });
+    uni.showToast({ title: e.message || '加载失败', icon: 'none' })
   } finally {
-    uni.stopPullDownRefresh();
+    uni.stopPullDownRefresh()
   }
 }
 
+function refresh() {
+  loadData()
+}
+
 function switchTo(url) {
-  console.log("url=========================>", url);
-  uni.switchTab({ url });
+  uni.switchTab({ url })
 }
 
 function goSearch() {
-  uni.switchTab({ url: "/pages/customer/list" });
+  uni.switchTab({ url: '/pages/customer/list' })
 }
 
 function onTodoClick(item) {
-  uni.navigateTo({ url: `/pages/customer/detail?id=${item.customerId}` });
+  uni.navigateTo({ url: `/pages/customer/detail?id=${item.customerId}` })
 }
-onShow(() => {
-  console.log("process.env", import.meta.env.BASE_URL);
-  fetchDashboardOverview();
-  loadData()
-});
-async function fetchDashboardOverview() {
-  let res = await getDashboardOverview({});
 
-  stats.value = res;
-  console.log("res", res);
-}
-onPullDownRefresh(loadData);
+onShow(loadData)
+onPullDownRefresh(loadData)
 </script>
 
 <style scoped>
@@ -159,155 +117,19 @@ onPullDownRefresh(loadData);
   padding: 24rpx 24rpx 148rpx;
   background: linear-gradient(180deg, #eaf2ff 0%, #f4f6fa 340rpx);
 }
-
-.header {
-  margin-bottom: 24rpx;
-}
-
-.header-top {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  margin-bottom: 24rpx;
-}
-
-.brand {
-  display: block;
-  font-size: 38rpx;
-  font-weight: 800;
-  color: #0f172a;
-}
-
-.role {
-  display: block;
-  margin-top: 8rpx;
-  font-size: 24rpx;
-  color: #64748b;
-}
-
-.search-btn {
-  width: 64rpx;
-  height: 64rpx;
-  border-radius: 16rpx;
-  background: #ffffff;
-  color: #2563eb;
-  font-size: 24rpx;
-  font-weight: 800;
-  line-height: 64rpx;
-  text-align: center;
-  border: 1rpx solid #dbeafe;
-}
-
-.greeting {
-  display: block;
-  font-size: 36rpx;
-  font-weight: 800;
-  color: #111827;
-}
-
-.date {
-  display: block;
-  margin-top: 8rpx;
-  font-size: 24rpx;
-  color: #64748b;
-}
-
-.stats-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 16rpx;
-  margin-bottom: 24rpx;
-}
-
-.section {
-  margin-bottom: 24rpx;
-}
-
-.panel {
-  background: #ffffff;
-  border: 1rpx solid #e8edf5;
-  border-radius: 16rpx;
-  padding: 24rpx;
-}
-
-.section-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 8rpx;
-}
-
-.section-title {
-  font-size: 30rpx;
-  font-weight: 800;
-  color: #111827;
-}
-
-.section-link {
-  font-size: 24rpx;
-  color: #2563eb;
-}
-
-.visit-row {
-  display: flex;
-  align-items: center;
-  padding: 22rpx 0;
-  border-bottom: 1rpx solid #eef2f7;
-}
-
-.visit-row:last-child {
-  border-bottom: none;
-}
-
-.visit-time {
-  width: 86rpx;
-  height: 50rpx;
-  line-height: 50rpx;
-  text-align: center;
-  border-radius: 12rpx;
-  background: #f8fafc;
-  color: #334155;
-  font-size: 24rpx;
-  font-weight: 700;
-  margin-right: 18rpx;
-}
-
-.visit-info {
-  flex: 1;
-  min-width: 0;
-}
-
-.visit-name,
-.visit-address {
-  display: block;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.visit-name {
-  font-size: 28rpx;
-  font-weight: 700;
-  color: #111827;
-}
-
-.visit-address {
-  margin-top: 6rpx;
-  font-size: 22rpx;
-  color: #64748b;
-}
-
-.visit-status {
-  padding: 6rpx 12rpx;
-  border-radius: 8rpx;
-  background: #fff7ed;
-  color: #c2410c;
-  font-size: 22rpx;
-  margin-left: 12rpx;
-}
-
-.visit-status.done {
-  background: #d1fae5;
-  color: #047857;
-}
+.header { margin-bottom: 24rpx; }
+.header-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 24rpx; }
+.brand { display: block; font-size: 38rpx; font-weight: 800; color: #0f172a; }
+.role { display: block; margin-top: 8rpx; font-size: 24rpx; color: #64748b; }
+.search-btn { width: 64rpx; height: 64rpx; border-radius: 16rpx; background: #ffffff; color: #2563eb; font-size: 24rpx; font-weight: 800; line-height: 64rpx; text-align: center; border: 1rpx solid #dbeafe; }
+.greeting { display: block; font-size: 36rpx; font-weight: 800; color: #111827; }
+.date { display: block; margin-top: 8rpx; font-size: 24rpx; color: #64748b; }
+.stats-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16rpx; margin-bottom: 24rpx; }
+.section { margin-bottom: 24rpx; }
+.panel { background: #ffffff; border: 1rpx solid #e8edf5; border-radius: 16rpx; padding: 24rpx; }
+.section-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8rpx; }
+.section-title { font-size: 30rpx; font-weight: 800; color: #111827; }
+.section-link { font-size: 24rpx; color: #2563eb; }
+.overview-row { display: flex; justify-content: space-between; align-items: center; padding: 22rpx 0; border-bottom: 1rpx solid #eef2f7; font-size: 26rpx; color: #334155; }
+.overview-row:last-child { border-bottom: none; }
 </style>

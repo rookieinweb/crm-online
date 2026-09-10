@@ -71,10 +71,6 @@
   font-size: 24rpx;
   color: #475569;
 }
-.hint.data-v-45258083 {
-  font-size: 22rpx;
-  color: #94a3b8;
-}
 .login-btn.data-v-45258083 {
   margin-top: 28rpx;
   height: 88rpx;

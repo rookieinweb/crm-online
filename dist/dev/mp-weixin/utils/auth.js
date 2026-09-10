@@ -8,6 +8,10 @@ function getToken() {
 function setToken(token) {
   common_vendor.index.setStorageSync(TOKEN_KEY, token);
 }
+function clearToken() {
+  common_vendor.index.removeStorageSync(TOKEN_KEY);
+  common_vendor.index.removeStorageSync(USER_KEY);
+}
 function getUser() {
   const raw = common_vendor.index.getStorageSync(USER_KEY);
   return raw || null;
@@ -15,6 +19,7 @@ function getUser() {
 function setUser(user) {
   common_vendor.index.setStorageSync(USER_KEY, user);
 }
+exports.clearToken = clearToken;
 exports.getToken = getToken;
 exports.getUser = getUser;
 exports.setToken = setToken;
